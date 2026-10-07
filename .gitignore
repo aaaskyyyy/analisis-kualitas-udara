@@ -1,0 +1,34 @@
+.git
+.env
+.DS_Store
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environment
+.venv/
+venv/
+venv_analysis/
+**/venv_analysis/
+
+# Astro / Airflow
+airflow_settings.yaml
+astro
+.astro/standalone/
+.astro/worktrees/
+airflow-webserver.pid
+webserver_config.py
+airflow.cfg
+airflow.db
+.astro/*.local.yml
+.astro/*.local.yaml
+**/.astro/dbt_metadata.json
+**/.astro/manifest.slim.json
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Streamlit
+.streamlit/secrets.toml
