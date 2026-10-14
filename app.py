@@ -3,7 +3,7 @@ import pandas as pd
 import mysql.connector
 import matplotlib.pyplot as plt
 import seaborn as sns
-
+import joblib
 
 # ============================================================
 # KONFIGURASI HALAMAN
@@ -86,11 +86,9 @@ except Exception as e:
 df_merged = pd.merge(
     df_air,
     df_weather,
-    left_on="measured_at",
-    right_on="recorded_at",
+    on="time_id",
     how="inner"
 )
-
 
 # ============================================================
 # JUDUL DASHBOARD
@@ -360,6 +358,21 @@ with tab2:
     st.pyplot(fig)
 
 
+@st.cache_resource
+def load_model():
+    return joblib.load("best_model_aqi.joblib")
+
+try:
+    model_artifact = load_model()
+    best_model = model_artifact["model"]
+    best_name = model_artifact["model_name"]
+    best_accuracy = model_artifact["accuracy"]
+    feature_cols = model_artifact["feature_columns"]
+
+except Exception as e:
+    st.error(f"Gagal memuat model: {e}")
+    st.stop()
+    
 # ============================================================
 # TAB 3 - MACHINE LEARNING
 # ============================================================
@@ -426,7 +439,10 @@ with tab3:
     st.pyplot(fig)
 
 
-    st.info(
-        "Model terbaik dari analisis notebook adalah "
-        "Logistic Regression dengan akurasi 65,73%."
+    st.subheader("Model Terbaik")
+
+    st.metric(
+        "Algoritma",
+        best_name,
+        f"Akurasi: {best_accuracy:.2%}"
     )
